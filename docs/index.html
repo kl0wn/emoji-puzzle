@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Emoji Puzzle</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+    </head>
+    <body>
+        <style>
+            .custom-table td {
+                border: 1px solid #d2d2d2;
+            }
+            table.custom-table {
+                border-collapse: collapse;
+            }
+
+            @media print {
+                .noPrint {
+                    display:none;
+                }
+            }
+
+        </style>
+        <div>
+            <h1>Emoji Key</h1>
+            <table id="emoji-key" style="font-size:1.9em">
+            </table>
+        </div>
+        <br/>
+        <br/>
+        <span id="puzzle"></span>
+        <br/>
+        <br/>
+        <input type="text" id="txtPuzzle" class="noPrint" />
+        <button id="btnMakePuzzle" class="noPrint">make puzzle!</button>
+        <script>
+            const emojis = {
+                A: "🍏",
+                B: "🍌",
+                C: "🥥",
+                D: "🎲",
+                E: "🥚",
+                F: "🔥",
+                G: "🍇",
+                H: "🍯",
+                I: "🧊",
+                J: "🧃",
+                K: "🥝",
+                L: "🍋",
+                M: "🥭",
+                N: "🥜",
+                O: "🍊",
+                P: "🍿",
+                Q: "🍔",
+                R: "🍎",
+                S: "🧂",
+                T: "🍅",
+                U: "☂️",
+                V: "🎻",
+                W: "🍉",
+                X: "❌",
+                Y: "💛",
+                Z: "🦓",
+                _: " "
+            };
+            const emojiTable = document.getElementById('emoji-key');
+            let firstRow = emojiTable.insertRow(0);
+            let secondRow = emojiTable.insertRow(1);
+            for(const [key, value] of Object.entries(emojis)) {
+                firstRow.insertCell().innerHTML = key;
+                secondRow.insertCell().innerHTML = value;
+            }
+            document.getElementById("btnMakePuzzle").addEventListener("click", () => {
+                const puzzle = document.getElementById("txtPuzzle").value.replace(/ /g, "_");
+                const letters = puzzle.split("");
+                if(letters.length > 0) {
+                    const puzzleTable = document.createElement("TABLE");
+                    let firstRow = puzzleTable.insertRow(0);
+                    let secondRow = puzzleTable.insertRow(1);
+                    for(const x in letters) {
+                        const obj = emojis[letters[x].toUpperCase()];
+                        if(obj) {
+                            firstRow.insertCell().innerHTML = obj;
+                            secondRow.insertCell().innerHTML = ".";
+                        }
+                    }
+                    puzzleTable.style.fontSize = "1.9em";
+                    puzzleTable.classList.add("custom-table");
+                    puzzleTable.id = puzzle;
+                    const btnClear = document.createElement("BUTTON")
+                    btnClear.innerText = "clear";
+                    btnClear.classList.add("noPrint");
+                    btnClear.addEventListener("click", () => {
+                        document.getElementById(puzzle).remove();
+                    })
+                    firstRow.insertCell().appendChild(btnClear);
+                    secondRow.insertCell().innerHTML = "";
+                    document.getElementById("puzzle").appendChild(puzzleTable);
+                    document.getElementById("txtPuzzle").value = ""
+                }
+            })
+        </script>
+    </body>
+</html> 
